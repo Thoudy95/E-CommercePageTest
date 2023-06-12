@@ -1,0 +1,151 @@
+import time
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+driver.implicitly_wait(3)
+
+driver.get('https://tutorialsninja.com/demo/')
+driver.maximize_window()
+driver.find_element(By.XPATH, "//a[normalize-space()='Phones & PDAs']").click()
+driver.find_element(By.XPATH, "//a[text()='HTC Touch HD']").click()
+time.sleep(2)
+firstPic = driver.find_element(By.XPATH, "//li[1]//a[1]//img[1]").click()
+rightArrowClicker = driver.find_element(By.XPATH, "//button[@title='Next (Right arrow key)']")
+
+for i in range(0,5):
+    rightArrowClicker.click()
+    time.sleep(1)
+
+esc = driver.find_element(By.XPATH, "//button[@class='mfp-close']").click()
+time.sleep(1)
+
+
+addButton = driver.find_element(By.ID, "button-cart")
+addButton.click()
+
+laptop = driver.find_element(By.XPATH, "//a[text()='Laptops & Notebooks']")
+action = ActionChains(driver)
+action.move_to_element(laptop).perform()
+time.sleep(2)
+driver.find_element(By.XPATH, "//a[normalize-space()='Show AllLaptops & Notebooks']").click()
+driver.find_element(By.XPATH,"//a[text()='HP LP3065']").click()
+driver.find_element(By.XPATH, "//button[@id='button-cart']").location_once_scrolled_into_view
+driver.find_element(By.XPATH, "//button[@id='button-cart']").click()
+time.sleep(1)
+calendar = driver.find_element(By.XPATH, "//i[@class='fa fa-calendar']")
+calendar.click()
+time.sleep(1)
+month = driver.find_element(By.XPATH, "//th[@class='picker-switch']")
+nextClick = driver.find_element(By.XPATH, "//th[@class='next']")
+while month.text != 'December 2022':
+    nextClick.click()
+
+time.sleep(2)
+
+calendarDay = driver.find_element(By.XPATH, "//td[text()='31']")
+calendarDay.location_once_scrolled_into_view
+calendarDay.click()
+time.sleep(3)
+
+addButtonTwo = driver.find_element(By.XPATH, "//button[@id='button-cart']")
+addButtonTwo.click()
+
+total = driver.find_element(By.XPATH, "//span[@id='cart-total']")
+total.click()
+time.sleep(1)
+checkoutBtn = driver.find_element(By.XPATH, "//p[@class='text-right']/a[2]")
+checkoutBtn.click()
+time.sleep(1)
+driver.find_element(By.XPATH, "//input[@value='guest']").click()
+checkoutBtnTwo = driver.find_element(By.CLASS_NAME, "btn-primary")
+#checkoutBtnTwo.location_once_scrolled_into_view
+time.sleep(2)
+checkoutBtnTwo.click()
+time.sleep(2)
+#driver.find_element(By.XPATH, "//input[@value='guest']").click()
+#driver.find_element(By.ID, "button-account").click()
+#time.sleep(2)
+
+#billingData = driver.find_element(By.XPATH, "//a[text()='Step 2: Billing Details']")
+#billingData.location_once_scrolled_into_view
+#time.sleep(2)
+
+firstName = driver.find_element(By.ID, "input-payment-firstname")
+firstName.location_once_scrolled_into_view
+firstName.click()
+time.sleep(1)
+firstName.send_keys('Wojtek')
+
+lastName = driver.find_element(By.ID, "input-payment-lastname")
+lastName.click()
+time.sleep(1)
+lastName.send_keys('Wojcik')
+
+email = driver.find_element(By.ID, "input-payment-email")
+email.click()
+time.sleep(1)
+email.send_keys('wojtek@mail.com')
+
+tele = driver.find_element(By.ID, "input-payment-telephone")
+tele.click()
+time.sleep(1)
+tele.send_keys('12343546')
+
+address = driver.find_element(By.ID, "input-payment-address-1")
+address.click()
+time.sleep(1)
+address.send_keys('Street Name')
+
+cityInput = driver.find_element(By.ID, "input-payment-city")
+cityInput.click()
+time.sleep(1)
+cityInput.send_keys('City')
+
+postCode = driver.find_element(By.ID, "input-payment-postcode")
+postCode.click()
+time.sleep(1)
+postCode.send_keys('12345')
+
+Country = driver.find_element(By.ID, "input-payment-country")
+dropdown = Select(Country)
+time.sleep(1)
+dropdown.select_by_visible_text("Spain")
+time.sleep(1)
+
+Region = driver.find_element(By.ID, "input-payment-zone")
+dropdown = Select(Region)
+time.sleep(3)
+dropdown.select_by_visible_text("Malaga")
+time.sleep(3)
+
+contBtn = driver.find_element(By.XPATH, "//input[@id='button-guest']")
+contBtn.click()
+time.sleep(2)
+
+deliveryBtn = driver.find_element(By.XPATH, "//input[@id='button-shipping-method']")
+deliveryBtn.click()
+time.sleep(2)
+
+paymentCheck = driver.find_element(By.XPATH, "//input[@name='agree']")
+paymentCheck.click()
+
+paymentBtn = driver.find_element(By.XPATH, "//input[@id='button-payment-method']")
+paymentBtn.click()
+
+confirmOrderBtn = driver.find_element(By.XPATH, "//input[@id='button-confirm']")
+confirmOrderBtn.click()
+
+time.sleep(5)
+
+successOrderText = driver.find_element(By.XPATH, "//div[@class='col-sm-12']").text
+
+assert "Your order has been placed!" in successOrderText
